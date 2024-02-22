@@ -11,6 +11,8 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
 
+    def __eq__(self, other):
+        return self.name == other.name and self.sell_in == other.sell_in and self.quality == other.quality
 
 class GildedRose(object):
 
@@ -18,6 +20,12 @@ class GildedRose(object):
         # DO NOT CHANGE THIS ATTRIBUTE!!!
         self.items = items
 
+    def get_items_by_name(self, name):
+        it = []
+        for i in self.items:
+            if i.name == name:
+                it.append(Item(i.name, i.sell_in, i.quality))
+        return it
     def update_quality(self):
         for item in self.items:
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":

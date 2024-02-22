@@ -9,8 +9,34 @@ class GildedRoseTest(unittest.TestCase):
         items = [Item("foo", 0, 0)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
-        self.assertEquals("fixme", items[0].name)
+        self.assertEqual("foo", items[0].name)
 
+    def test_vest_item_should_decrease_after_one_day(self):
+        vest = "+5 Dexterity Vest"
+        items = [Item(vest, 1, 2), Item(vest, 9, 19), Item(vest, 4, 6), ]
+        gr = GildedRose(items)
 
+        gr.update_quality()
+        assert(gr.get_items_by_name(vest) == [Item(vest, 0, 1), Item(vest, 8, 18), Item(vest, 3, 5)])
+
+    def test_vest_item_should_decrease_after_two_days(self):
+        vest = "+5 Dexterity Vest"
+        vest2 = "+6 Dexterity Vest"
+        items = [Item(vest, 1, 2), Item(vest, 9, 19), Item(vest, 4, 6), Item(vest2, 3, 5)]
+        gr = GildedRose(items)
+
+        gr.update_quality()
+        gr.update_quality()
+        assert(gr.get_items_by_name(vest2) == [Item(vest2, 1, 3)])
+        assert(gr.get_items_by_name(vest) == [Item(vest, -1, 0), Item(vest, 7, 17), Item(vest, 2, 4)])
+
+    def test_aged_brie_should_decrease_after_a_day(self):
+        agedbrie = "Aged Brie"
+        items = [Item(agedbrie, 1, 2)]
+        gr = GildedRose(items)
+        gr.update_quality()
+        assert(gr.get_items_by_name(agedbrie) == [Item(agedbrie, 0, 3)])
+        gr.update_quality()
+        assert(gr.get_items_by_name(agedbrie) == [Item(agedbrie, -1, 5)])
 if __name__ == '__main__':
     unittest.main()
